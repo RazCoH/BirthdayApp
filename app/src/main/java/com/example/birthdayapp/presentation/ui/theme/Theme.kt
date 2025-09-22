@@ -1,4 +1,4 @@
-package com.example.birthdayapp.Presentation.ui.theme
+package com.example.birthdayapp.presentation.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
