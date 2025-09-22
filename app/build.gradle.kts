@@ -56,4 +56,30 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+
+    /* Coroutines */
+    implementation(libs.kotlinx.coroutines.core)
+
+    /* Lottie */
+    implementation(libs.lottie)
+
+    /* Lifecycle */
+    implementation(libs.lifecycle.process)
+
+    /* View Model */
+    implementation(libs.lifecycle.viewmodel.compose)
+
+    /* Ktor */
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.serialization.kotlinx.json)
+    implementation(libs.ktor.client.logging)
+    implementation(libs.ktor.client.cio)
+    implementation(libs.ktor.server.websockets)
+
+    /* Koin */
+    implementation(libs.koin.android)
+    implementation(libs.koin.compose)
+    implementation(libs.koin.compose.viewmodel)
+
 }

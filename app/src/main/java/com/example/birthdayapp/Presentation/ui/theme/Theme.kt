@@ -1,6 +1,5 @@
-package com.example.birthdayapp.ui.theme
+package com.example.birthdayapp.Presentation.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
