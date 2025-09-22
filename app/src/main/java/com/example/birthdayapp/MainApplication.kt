@@ -2,6 +2,7 @@ package com.example.birthdayapp
 
 import android.app.Application
 import com.example.birthdayapp.di.appModule
+import com.example.birthdayapp.di.deviceModule
 import com.example.birthdayapp.di.networkModule
 import com.example.birthdayapp.di.repositoriesModule
 import com.example.birthdayapp.di.viewModelsModule
@@ -20,7 +21,8 @@ class MainApplication : Application() {
                 appModule,
                 repositoriesModule,
                 networkModule,
-                viewModelsModule
+                viewModelsModule,
+                deviceModule
             )
         }
     }

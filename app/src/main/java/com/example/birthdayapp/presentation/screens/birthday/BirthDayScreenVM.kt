@@ -13,12 +13,9 @@ class BirthDayScreenVM(private val birthdayRepo: BirthdayRepository) : ViewModel
     private val _birthdayState = MutableStateFlow<SocketResult?>(null)
     val birthdayState: StateFlow<SocketResult?> = _birthdayState
 
-    fun observeBirthdayUpdates(
-        host:String,
-        port: Int
-    ) {
+    fun observeBirthdayUpdates(host:String) {
         viewModelScope.launch {
-            birthdayRepo.observeBirthdaySocket(host,port).collect { result ->
+            birthdayRepo.observeBirthdaySocket(host).collect { result ->
                 _birthdayState.value = result
             }
         }

@@ -16,6 +16,7 @@ ktor_version = "3.3.0"
 koin = "4.1.1"
 nav3Core = "1.0.0-alpha09"
 lifecycleViewmodelNav3 = "1.0.0-alpha04"
+konnectivity = "0.1-alpha01"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -55,6 +56,9 @@ lifecycle-viewmodel-compose = { module = "org.jetbrains.androidx.lifecycle:lifec
 androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "nav3Core" }
 androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "nav3Core" }
 androidx-lifecycle-viewmodel-navigation3 = { module = "androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "lifecycleViewmodelNav3" }
+
+konnectivity = { module = "com.plusmobileapps:konnectivity", version.ref = "konnectivity" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -10,12 +10,10 @@ class BirthdayRepository(private val socketClient: SocketClient) {
 
     fun observeBirthdaySocket(
         host: String,
-        port: Int
     ): Flow<SocketResult> {
 
         return socketClient.observeSocket<BirthdayItem>(
             host = host,
-            port = port,
             path = Constants.Network.BIRTHDAY_PATH
         )
     }
