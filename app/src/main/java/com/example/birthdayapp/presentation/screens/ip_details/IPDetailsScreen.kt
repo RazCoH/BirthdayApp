@@ -14,7 +14,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,8 +26,8 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun IPDetailsScreen(vm: IPDetailsScreenVM = koinViewModel(), onContinue: (String) -> Unit) {
-    var ipNumber by remember { mutableStateOf("") }
-    var errorMessage:String? by remember { mutableStateOf(null) }
+    var ipNumber by rememberSaveable { mutableStateOf("") }
+    var errorMessage:String? by rememberSaveable { mutableStateOf(null) }
     val uiState by vm.ipDetailsUIState.collectAsState()
 
 
@@ -74,7 +74,8 @@ fun IPDetailsScreen(vm: IPDetailsScreenVM = koinViewModel(), onContinue: (String
             value = ipNumber,
             modifier = Modifier.fillMaxWidth(),
             onValueChange = { ipNumber = it },
-            label = Constants.Strings.IP_DETAILS_IP_PLACEHOLDER_TXT
+            placeholderText = Constants.Strings.IP_DETAILS_IP_PLACEHOLDER_TXT,
+            maxLength = Constants.Values.MAX_LENGTH_IP_TEXT_FIELD
         )
 
         Spacer(modifier = Modifier.height(42.dp))

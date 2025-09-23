@@ -20,6 +20,10 @@ object Constants {
         const val GENERAL_ERROR = "Something went wrong\nPlease try again later"
     }
 
+    object Values {
+        const val MAX_LENGTH_IP_TEXT_FIELD = 19
+    }
+
     object Strings {
 
         //Error Dialog
