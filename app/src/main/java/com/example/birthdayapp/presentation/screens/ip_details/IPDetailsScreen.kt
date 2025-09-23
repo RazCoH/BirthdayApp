@@ -10,6 +10,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,17 +27,33 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun IPDetailsScreen(vm: IPDetailsScreenVM = koinViewModel(), onContinue: (String) -> Unit) {
     var ipNumber by remember { mutableStateOf("") }
-
+    var errorMessage:String? by remember { mutableStateOf(null) }
     val uiState by vm.ipDetailsUIState.collectAsState()
 
-    when(val uiState = uiState){
-        is IPDetailsUIState.NavigateToNextScreen -> {
-            onContinue.invoke(uiState.hostIP)
+
+        when(val uiState = uiState){
+            is IPDetailsUIState.NavigateToNextScreen -> {
+                LaunchedEffect(Unit) {
+                    onContinue.invoke(uiState.hostIP)
+                }
+            }
+            is IPDetailsUIState.ShowError -> {
+                LaunchedEffect(uiState.ts) {
+                    errorMessage = uiState.error.message
+                }
+            }
+            null -> {}
         }
-        is IPDetailsUIState.ShowError -> {
-            ShowErrorDialog(uiState.error.message)
+
+
+    errorMessage?.let {
+        ErrorDialog(
+            Constants.Strings.ERROR_DIALOG_TITLE_TXT,
+            it,
+            Constants.Strings.ERROR_DIALOG_BTN_TXT
+        ) {
+            errorMessage = null
         }
-        null -> {}
     }
 
     Column(
@@ -79,16 +96,3 @@ fun IPDetailsScreen(vm: IPDetailsScreenVM = koinViewModel(), onContinue: (String
     }
 }
 
-@Composable
-fun ShowErrorDialog(message: String) {
-    var showDialog by remember { mutableStateOf(true) }
-    if (showDialog) {
-        ErrorDialog(
-            Constants.Strings.ERROR_DIALOG_TITLE_TXT,
-            message,
-            Constants.Strings.ERROR_DIALOG_BTN_TXT
-        ) {
-            showDialog = false
-        }
-    }
-}

@@ -16,7 +16,7 @@ class IPDetailsScreenVM(private val deviceInfoProvider: DeviceInfoProvider) : Vi
         if (ipNumber.isValidIPAddress()){
             _ipDetailsUIState.value = IPDetailsUIState.NavigateToNextScreen(ipNumber)
         }else{
-            _ipDetailsUIState.value = IPDetailsUIState.ShowError(Error.InvalidIP)
+            _ipDetailsUIState.value = IPDetailsUIState.ShowError(Error.InvalidIP, System.currentTimeMillis())
         }
     }
 
@@ -24,7 +24,7 @@ class IPDetailsScreenVM(private val deviceInfoProvider: DeviceInfoProvider) : Vi
         deviceInfoProvider.getLocalIpAddress()?.let {
             _ipDetailsUIState.value = IPDetailsUIState.NavigateToNextScreen(it)
         }?:run {
-            _ipDetailsUIState.value = IPDetailsUIState.ShowError(Error.GeneralError)
+            _ipDetailsUIState.value = IPDetailsUIState.ShowError(Error.GeneralError,System.currentTimeMillis())
         }
     }
 
