@@ -1,51 +1,169 @@
 package com.example.birthdayapp.presentation.screens.birthday
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import com.example.birthdayapp.data.models.BirthdayItem
-import com.example.birthdayapp.data.models.SocketResult
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.birthdayapp.R
+import com.example.birthdayapp.presentation.components.BabyLoader
 import com.example.birthdayapp.presentation.dialogs.ErrorDialog
+import com.example.birthdayapp.presentation.ui.theme.PelicanBlue
 import com.example.birthdayapp.utils.Constants
-import com.example.birthdayapp.utils.Error
 import org.koin.compose.viewmodel.koinViewModel
+import androidx.compose.material3.Text
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.intl.Locale
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.toUpperCase
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.birthdayapp.data.models.BirthdayItem
+import com.example.birthdayapp.presentation.ui.theme.BirthdayText
 
 @Composable
 fun BirthDayScreen(vm: BirthDayScreenVM = koinViewModel(), hostIP: String) {
-    val state by vm.birthdayState.collectAsState()
+    val uiState by vm.birthdayState.collectAsStateWithLifecycle()
+    var errorMessage: String? by rememberSaveable { mutableStateOf(null) }
 
-
-    when (val s = state) {
-        is SocketResult.Failure -> ShowErrorDialog(s.error.message)
-
-
-        is SocketResult.Success<*> -> {
-            (s.result as? BirthdayItem)?.let {
-
-            } ?: run {
-                ShowErrorDialog(Error.GeneralError.message)
-            }
+    when (val us = uiState) {
+        BirthdayUIState.Loading -> {
+            BabyLoader()
         }
 
-        null -> {}
+        is BirthdayUIState.ShowBirthdayUI -> {
+            BirthDayContent(us.data)
+        }
+
+        is BirthdayUIState.ShowError -> {
+            errorMessage = us.error.message
+        }
     }
 
-    vm.observeBirthdayUpdates(host = hostIP)
+    errorMessage?.let {
+        ErrorDialog(
+            Constants.Strings.ERROR_DIALOG_TITLE_TXT,
+            it,
+            Constants.Strings.ERROR_DIALOG_BTN_TXT
+        ) {
+            errorMessage = null
+        }
+    }
+
+    LaunchedEffect(hostIP) {
+        vm.observeBirthdayUpdates(host = hostIP)
+    }
 }
 
 @Composable
-fun ShowErrorDialog(message: String) {
-    var showDialog by remember { mutableStateOf(true) }
-    if (showDialog) {
-        ErrorDialog(
-            Constants.Strings.ERROR_DIALOG_TITLE_TXT,
-            message,
-            Constants.Strings.ERROR_DIALOG_BTN_TXT
-        ) {
-            showDialog = false
+fun BirthDayContent(item: BirthdayItem) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(PelicanBlue)
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.bg_android_pelican),
+            contentDescription = "background image",
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop
+        )
+
+        Column(modifier = Modifier.fillMaxSize()) {
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            Text(
+                text = "TODAY ${item.name?.toUpperCase(Locale.current)} IS",
+                fontSize = 21.sp,
+                textAlign = TextAlign.Center,
+                color = BirthdayText,
+                letterSpacing = (-0.42).sp,
+                fontWeight = FontWeight.W500,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
+
+            Spacer(modifier = Modifier.height(14.dp))
+
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(22.dp),
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_left_swirls),
+                    contentDescription = "age image",
+                    modifier = Modifier
+                        .width(50.2.dp)
+                        .height(43.53.dp),
+                )
+                Image(
+                    painter = painterResource(id = R.drawable.ic_one),
+                    contentDescription = "age image",
+                    modifier = Modifier
+                        .wrapContentWidth()
+                        .height(87.95.dp),
+                )
+                Image(
+                    painter = painterResource(id = R.drawable.ic_right_swirls),
+                    contentDescription = "age image",
+                    modifier = Modifier
+                        .width(50.2.dp)
+                        .height(43.53.dp),
+                )
+            }
+
+            Spacer(modifier = Modifier.height(14.dp))
+
+            Text(
+                text = "MONTH OLD!",
+                fontSize = 18.sp,
+                textAlign = TextAlign.Center,
+                color = BirthdayText,
+                letterSpacing = (-0.36).sp,
+                fontWeight = FontWeight.W500,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
+
+            Spacer(modifier = Modifier.height(15.dp))
+
+            Image(
+                painter = painterResource(id = R.drawable.ic_placeholder_blue),
+                contentDescription = "baby image",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 50.dp),
+            )
+
+            Spacer(modifier = Modifier.height(15.dp))
+
+            Image(
+                painter = painterResource(id = R.drawable.ic_nanit_logo),
+                contentDescription = "nanit logo",
+                modifier = Modifier
+                    .width(68.62.dp)
+                    .height(29.45.dp)
+                    .align(Alignment.CenterHorizontally)
+            )
         }
     }
 }
+

@@ -11,7 +11,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -19,6 +18,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.birthdayapp.presentation.components.NumericTextField
 import com.example.birthdayapp.presentation.dialogs.ErrorDialog
 import com.example.birthdayapp.utils.Constants
@@ -28,8 +28,7 @@ import org.koin.compose.viewmodel.koinViewModel
 fun IPDetailsScreen(vm: IPDetailsScreenVM = koinViewModel(), onContinue: (String) -> Unit) {
     var ipNumber by rememberSaveable { mutableStateOf("") }
     var errorMessage:String? by rememberSaveable { mutableStateOf(null) }
-    val uiState by vm.ipDetailsUIState.collectAsState()
-
+    val uiState by vm.ipDetailsUIState.collectAsStateWithLifecycle()
 
         when(val uiState = uiState){
             is IPDetailsUIState.NavigateToNextScreen -> {
@@ -45,7 +44,6 @@ fun IPDetailsScreen(vm: IPDetailsScreenVM = koinViewModel(), onContinue: (String
             }
             null -> {}
         }
-
 
     errorMessage?.let {
         ErrorDialog(
