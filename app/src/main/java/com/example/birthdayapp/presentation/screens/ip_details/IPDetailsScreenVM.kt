@@ -28,4 +28,8 @@ class IPDetailsScreenVM(private val deviceInfoProvider: DeviceInfoProvider) : Vi
         }
     }
 
+    fun clearState(){
+        _ipDetailsUIState.value = null
+    }
+
 }

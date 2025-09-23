@@ -40,6 +40,7 @@ fun IPDetailsScreen(vm: IPDetailsScreenVM = koinViewModel(), onContinue: (String
             is IPDetailsUIState.ShowError -> {
                 LaunchedEffect(uiState.ts) {
                     errorMessage = uiState.error.message
+                    vm.clearState()
                 }
             }
             null -> {}
