@@ -87,7 +87,7 @@ fun BirthDayContent(item: BirthdayItem) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(PelicanBlue)
+            .background(item.theme.backgroundColor)
     ) {
         Image(
             painter = painterResource(id = item.theme.backgroundImage),

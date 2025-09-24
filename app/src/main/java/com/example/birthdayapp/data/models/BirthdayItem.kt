@@ -44,4 +44,11 @@ enum class BirthDayTheme {
             FOX -> R.drawable.ic_camera_green
             ELEPHANT -> R.drawable.ic_camera_yellow
         }
+
+    val backgroundColor: Color
+        get() = when (this) {
+            PELICAN -> PelicanBlue
+            FOX -> FoxGreen
+            ELEPHANT -> ElephantYellow
+        }
 }
