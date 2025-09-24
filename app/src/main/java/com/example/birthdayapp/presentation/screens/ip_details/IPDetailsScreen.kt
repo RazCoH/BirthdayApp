@@ -18,32 +18,25 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.birthdayapp.presentation.components.NumericTextField
 import com.example.birthdayapp.presentation.dialogs.ErrorDialog
 import com.example.birthdayapp.utils.Constants
+import kotlinx.coroutines.flow.collectLatest
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun IPDetailsScreen(vm: IPDetailsScreenVM = koinViewModel(), onContinue: (String) -> Unit) {
     var ipNumber by rememberSaveable { mutableStateOf("") }
     var errorMessage:String? by rememberSaveable { mutableStateOf(null) }
-    val uiState by vm.ipDetailsUIState.collectAsStateWithLifecycle()
 
-        when(val uiState = uiState){
-            is IPDetailsUIState.NavigateToNextScreen -> {
-                LaunchedEffect(Unit) {
-                    onContinue.invoke(uiState.hostIP)
-                }
+    LaunchedEffect(Unit) {
+        vm.ipDetailsEvent.collectLatest {
+            when(val event = it){
+                is IPDetailsEvent.NavigateToNextScreen ->   onContinue.invoke(event.hostIP)
+                is IPDetailsEvent.ShowError -> errorMessage = event.error.message
             }
-            is IPDetailsUIState.ShowError -> {
-                LaunchedEffect(uiState.ts) {
-                    errorMessage = uiState.error.message
-                    vm.clearState()
-                }
-            }
-            null -> {}
         }
+    }
 
     errorMessage?.let {
         ErrorDialog(

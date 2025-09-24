@@ -1,35 +1,47 @@
 package com.example.birthdayapp.presentation.screens.ip_details
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.birthdayapp.utils.DeviceInfoProvider
 import com.example.birthdayapp.utils.Error
 import com.example.birthdayapp.utils.isValidIPAddress
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.launch
 
 class IPDetailsScreenVM(private val deviceInfoProvider: DeviceInfoProvider) : ViewModel() {
 
-    private val _ipDetailsUIState = MutableStateFlow<IPDetailsUIState?>(null)
-    val ipDetailsUIState: StateFlow<IPDetailsUIState?> = _ipDetailsUIState
+    private val _ipDetailsEvent = MutableSharedFlow<IPDetailsEvent>()
+    val ipDetailsEvent = _ipDetailsEvent.asSharedFlow()
 
     fun checkValidation(ipNumber: String) {
-        if (ipNumber.isValidIPAddress()){
-            _ipDetailsUIState.value = IPDetailsUIState.NavigateToNextScreen(ipNumber)
-        }else{
-            _ipDetailsUIState.value = IPDetailsUIState.ShowError(Error.InvalidIP, System.currentTimeMillis())
+        viewModelScope.launch {
+            if (ipNumber.isValidIPAddress()) {
+                _ipDetailsEvent.emit(IPDetailsEvent.NavigateToNextScreen(ipNumber))
+            } else {
+                _ipDetailsEvent.emit(
+                    IPDetailsEvent.ShowError(
+                        Error.InvalidIP,
+                        System.currentTimeMillis()
+                    )
+                )
+            }
         }
     }
 
     fun getNetworkDetailsProgrammatically() {
-        deviceInfoProvider.getLocalIpAddress()?.let {
-            _ipDetailsUIState.value = IPDetailsUIState.NavigateToNextScreen(it)
-        }?:run {
-            _ipDetailsUIState.value = IPDetailsUIState.ShowError(Error.GeneralError,System.currentTimeMillis())
+        viewModelScope.launch {
+            deviceInfoProvider.getLocalIpAddress()?.let {
+                _ipDetailsEvent.emit(IPDetailsEvent.NavigateToNextScreen(it))
+            } ?: run {
+                _ipDetailsEvent.emit(
+                    IPDetailsEvent.ShowError(
+                        Error.GeneralError,
+                        System.currentTimeMillis()
+                    )
+                )
+            }
         }
-    }
-
-    fun clearState(){
-        _ipDetailsUIState.value = null
     }
 
 }
