@@ -90,7 +90,7 @@ fun BirthDayContent(item: BirthdayItem) {
             .background(PelicanBlue)
     ) {
         Image(
-            painter = painterResource(id = R.drawable.bg_android_pelican),
+            painter = painterResource(id = item.theme.backgroundImage),
             contentDescription = "background image",
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop
@@ -101,7 +101,7 @@ fun BirthDayContent(item: BirthdayItem) {
             Spacer(modifier = Modifier.height(20.dp))
 
             Text(
-                text = "TODAY ${item.name?.toUpperCase(Locale.current)} IS",
+                text = "TODAY ${item.name.toUpperCase(Locale.current)} IS",
                 fontSize = 21.sp,
                 textAlign = TextAlign.Center,
                 color = BirthdayText,
@@ -157,7 +157,7 @@ fun BirthDayContent(item: BirthdayItem) {
                 .wrapContentHeight()
                 .fillMaxWidth()){
                 Image(
-                    painter = painterResource(id = R.drawable.ic_placeholder_blue),
+                    painter = painterResource(id = item.theme.profileImagePlaceHolder),
                     contentDescription = "baby image",
                     modifier = Modifier
                         .fillMaxWidth()
@@ -170,7 +170,7 @@ fun BirthDayContent(item: BirthdayItem) {
                     contentAlignment = Alignment.TopEnd
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.ic_camera_blue),
+                        painter = painterResource(id = item.theme.cameraIcon),
                         contentDescription = "camera icon",
                         modifier = Modifier
                             .size(36.dp)
