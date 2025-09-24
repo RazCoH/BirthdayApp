@@ -145,13 +145,31 @@ fun BirthDayContent(item: BirthdayItem) {
 
             Spacer(modifier = Modifier.height(15.dp))
 
-            Image(
-                painter = painterResource(id = R.drawable.ic_placeholder_blue),
-                contentDescription = "baby image",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 50.dp),
-            )
+            Box(modifier = Modifier
+                .wrapContentHeight()
+                .fillMaxWidth()){
+                Image(
+                    painter = painterResource(id = R.drawable.ic_placeholder_blue),
+                    contentDescription = "baby image",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 50.dp),
+                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 50.dp),
+                    contentAlignment = Alignment.TopEnd
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_camera_blue),
+                        contentDescription = "camera icon",
+                        modifier = Modifier
+                            .size(36.dp)
+                            .offset(x = (-36).dp, y = (16).dp)
+                    )
+                }
+            }
 
             Spacer(modifier = Modifier.height(15.dp))
 
