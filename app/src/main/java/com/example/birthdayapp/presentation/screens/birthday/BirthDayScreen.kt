@@ -10,8 +10,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -39,9 +42,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.birthdayapp.data.models.BirthdayItem
 import com.example.birthdayapp.presentation.ui.theme.BirthdayText
+import kotlinx.coroutines.flow.collectLatest
+import org.koin.core.parameter.parametersOf
 
 @Composable
-fun BirthDayScreen(vm: BirthDayScreenVM = koinViewModel(), hostIP: String) {
+fun BirthDayScreen(hostIP: String, vm: BirthDayScreenVM = koinViewModel(parameters = { parametersOf(hostIP) })) {
+
     val uiState by vm.birthdayState.collectAsStateWithLifecycle()
     var errorMessage: String? by rememberSaveable { mutableStateOf(null) }
 
@@ -52,10 +58,6 @@ fun BirthDayScreen(vm: BirthDayScreenVM = koinViewModel(), hostIP: String) {
 
         is BirthdayUIState.ShowBirthdayUI -> {
             BirthDayContent(us.data)
-        }
-
-        is BirthdayUIState.ShowError -> {
-            errorMessage = us.error.message
         }
     }
 
@@ -70,7 +72,13 @@ fun BirthDayScreen(vm: BirthDayScreenVM = koinViewModel(), hostIP: String) {
     }
 
     LaunchedEffect(hostIP) {
-        vm.observeBirthdayUpdates(host = hostIP)
+        vm.birthdayUIEvent.collectLatest {
+            when(val event = it){
+                is BirthdayUIEvent.ShowError -> {
+                    errorMessage = event.error.message
+                }
+            }
+        }
     }
 }
 

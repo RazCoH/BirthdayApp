@@ -6,6 +6,6 @@ import org.koin.dsl.module
 import org.koin.core.module.dsl.viewModel
 
 val viewModelsModule = module {
-    viewModel { BirthDayScreenVM(get()) }
+    viewModel { (hostIp: String) -> BirthDayScreenVM(get(),hostIp) }
     viewModel { IPDetailsScreenVM(get()) }
 }
