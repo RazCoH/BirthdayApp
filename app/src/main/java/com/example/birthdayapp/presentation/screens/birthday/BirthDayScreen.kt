@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -123,7 +124,9 @@ fun BirthDayContent(item: BirthdayItem, age: Age) {
                     contentDescription = "age image",
                     modifier = Modifier
                         .width(50.2.dp)
-                        .height(43.53.dp),
+                        .height(43.53.dp)
+                        .align(Alignment.CenterVertically)
+                    ,
                 )
                 Image(
                     painter = painterResource(id = age.ageAsset),
@@ -137,7 +140,8 @@ fun BirthDayContent(item: BirthdayItem, age: Age) {
                     contentDescription = "age image",
                     modifier = Modifier
                         .width(50.2.dp)
-                        .height(43.53.dp),
+                        .height(43.53.dp)
+                        .align(Alignment.CenterVertically),
                 )
             }
 
@@ -153,7 +157,7 @@ fun BirthDayContent(item: BirthdayItem, age: Age) {
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
 
-            Spacer(modifier = Modifier.height(15.dp))
+            Spacer(   modifier = Modifier.heightIn(min = 15.dp, max = 19.dp))
 
             Box(modifier = Modifier
                 .wrapContentHeight()
