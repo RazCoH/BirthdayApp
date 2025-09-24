@@ -1,4 +1,4 @@
-package com.example.birthdayapp.utils
+package com.example.birthdayapp.utils.extensions
 
 fun String.isValidIPAddress(): Boolean {
     val parts = split(".")

@@ -25,23 +25,29 @@ class BirthDayScreenVM(
     val birthdayUIEvent = _birthdayUIEvents.asSharedFlow()
 
     init {
-        viewModelScope.launch {
-            observeBirthdayUpdates(hostIp)
-        }
+        observeBirthdayUpdates(hostIp)
     }
 
-    private suspend fun observeBirthdayUpdates(host: String) {
-        birthdayRepo.observeBirthdaySocket(host).collectLatest {
-            when (val result = it) {
-                is SocketResult.Failure -> {
-                    _birthdayUIEvents.emit(BirthdayUIEvent.ShowError(result.error))
-                }
+    fun observeBirthdayUpdates(host: String) {
+        viewModelScope.launch {
+            birthdayRepo.observeBirthdaySocket(host).collectLatest {
+                when (val result = it) {
+                    is SocketResult.Failure -> {
+                        _birthdayUIEvents.emit(BirthdayUIEvent.ShowError(result.error))
+                    }
 
-                is SocketResult.Success<*> -> {
-                    (result.data as? BirthdayItem)?.let { birthdayItem ->
-                        _birthdayUIState.value = BirthdayUIState.ShowBirthdayUI(birthdayItem)
-                    } ?: run {
-                        _birthdayUIEvents.emit(BirthdayUIEvent.ShowError(Error.GeneralError))
+                    is SocketResult.Success<*> -> {
+                        (result.data as? BirthdayItem)?.let { birthdayItem ->
+                            birthdayItem.getAge()?.let { age ->
+                                _birthdayUIState.value =
+                                    BirthdayUIState.ShowBirthdayUI(birthdayItem, age)
+                            } ?: run {
+                                _birthdayUIEvents.emit(BirthdayUIEvent.ShowError(Error.MissingAgeError))
+                            }
+
+                        } ?: run {
+                            _birthdayUIEvents.emit(BirthdayUIEvent.ShowError(Error.GeneralError))
+                        }
                     }
                 }
             }

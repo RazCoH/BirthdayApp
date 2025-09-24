@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.birthdayapp.utils.DeviceInfoProvider
 import com.example.birthdayapp.utils.Error
-import com.example.birthdayapp.utils.isValidIPAddress
+import com.example.birthdayapp.utils.extensions.isValidIPAddress
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch

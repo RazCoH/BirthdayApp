@@ -29,7 +29,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.birthdayapp.R
 import com.example.birthdayapp.presentation.components.BabyLoader
 import com.example.birthdayapp.presentation.dialogs.ErrorDialog
-import com.example.birthdayapp.presentation.ui.theme.PelicanBlue
 import com.example.birthdayapp.utils.Constants
 import org.koin.compose.viewmodel.koinViewModel
 import androidx.compose.material3.Text
@@ -40,6 +39,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.birthdayapp.data.models.Age
 import com.example.birthdayapp.data.models.BirthdayItem
 import com.example.birthdayapp.presentation.ui.theme.BirthdayText
 import kotlinx.coroutines.flow.collectLatest
@@ -57,7 +57,7 @@ fun BirthDayScreen(hostIP: String, vm: BirthDayScreenVM = koinViewModel(paramete
         }
 
         is BirthdayUIState.ShowBirthdayUI -> {
-            BirthDayContent(us.data)
+            BirthDayContent(us.data,us.age)
         }
     }
 
@@ -68,6 +68,7 @@ fun BirthDayScreen(hostIP: String, vm: BirthDayScreenVM = koinViewModel(paramete
             Constants.Strings.ERROR_DIALOG_BTN_TXT
         ) {
             errorMessage = null
+            vm.observeBirthdayUpdates(hostIP)
         }
     }
 
@@ -83,7 +84,8 @@ fun BirthDayScreen(hostIP: String, vm: BirthDayScreenVM = koinViewModel(paramete
 }
 
 @Composable
-fun BirthDayContent(item: BirthdayItem) {
+fun BirthDayContent(item: BirthdayItem, age: Age) {
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -124,7 +126,7 @@ fun BirthDayContent(item: BirthdayItem) {
                         .height(43.53.dp),
                 )
                 Image(
-                    painter = painterResource(id = R.drawable.ic_one),
+                    painter = painterResource(id = age.ageAsset),
                     contentDescription = "age image",
                     modifier = Modifier
                         .wrapContentWidth()
@@ -142,7 +144,7 @@ fun BirthDayContent(item: BirthdayItem) {
             Spacer(modifier = Modifier.height(14.dp))
 
             Text(
-                text = "MONTH OLD!",
+                text = "${age.ageLabel} OLD!",
                 fontSize = 18.sp,
                 textAlign = TextAlign.Center,
                 color = BirthdayText,

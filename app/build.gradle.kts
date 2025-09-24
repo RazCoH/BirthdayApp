@@ -91,4 +91,7 @@ dependencies {
     /* Connectivity */
     implementation(libs.konnectivity)
 
+    /* Kotlinx Datetime */
+    implementation(libs.kotlinx.datetime)
+
 }
