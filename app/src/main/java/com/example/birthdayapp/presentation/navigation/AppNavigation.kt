@@ -29,6 +29,7 @@ fun AppNavigation(activity: MainActivity) {
             }
             entry<Screen.BirthdayScreen> {
                 BirthDayScreen(hostIP = it.ip)
+                /* Define activity as portrait when BirthDayScreen is open. */
                 activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
             }
         }

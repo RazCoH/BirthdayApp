@@ -1,4 +1,4 @@
-package com.example.birthdayapp.presentation.bottom_sheets
+package com.example.birthdayapp.presentation.bottom_sheets.take_photo_bottom_sheet
 
 import android.content.Context
 import android.net.Uri

@@ -50,7 +50,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.birthdayapp.data.models.Age
 import com.example.birthdayapp.data.models.BirthdayItem
-import com.example.birthdayapp.presentation.bottom_sheets.TakePhotoBottomSheet
+import com.example.birthdayapp.presentation.bottom_sheets.take_photo_bottom_sheet.TakePhotoBottomSheet
 import com.example.birthdayapp.presentation.ui.theme.BirthdayText
 import com.example.birthdayapp.utils.Error
 import kotlinx.coroutines.flow.collectLatest

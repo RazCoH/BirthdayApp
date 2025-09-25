@@ -1,6 +1,6 @@
 package com.example.birthdayapp.di
 
-import com.example.birthdayapp.presentation.bottom_sheets.TakePhotoBottomSheetVM
+import com.example.birthdayapp.presentation.bottom_sheets.take_photo_bottom_sheet.TakePhotoBottomSheetVM
 import com.example.birthdayapp.presentation.screens.birthday.BirthDayScreenVM
 import com.example.birthdayapp.presentation.screens.ip_details.IPDetailsScreenVM
 import org.koin.dsl.module
