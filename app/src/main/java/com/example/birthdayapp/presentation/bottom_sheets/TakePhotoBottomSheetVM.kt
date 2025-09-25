@@ -35,7 +35,7 @@ class TakePhotoBottomSheetVM : ViewModel() {
             is TakePhotoIntents.OnImageSavedWith -> onImageSavedWith(intent)
 
             is TakePhotoIntents.OnImageSavingCanceled -> {
-                _takePhotoState.value = _takePhotoState.value.copy(tempFileUrl = null)
+                _takePhotoState.value = TakePhotoState()
             }
         }
     }
@@ -53,7 +53,7 @@ class TakePhotoBottomSheetVM : ViewModel() {
             "${intent.compositionContext.packageName}.provider",
             tempFile
         )
-        _takePhotoState.value = _takePhotoState.value.copy(tempFileUrl = uri)
+        _takePhotoState.value = TakePhotoState(tempFileUrl = uri)
     }
 
     private suspend fun onFinishPickingImagesWith(intent: TakePhotoIntents.OnFinishPickingImagesWith) {
@@ -65,12 +65,10 @@ class TakePhotoBottomSheetVM : ViewModel() {
             val bitmapOptions = BitmapFactory.Options()
             bitmapOptions.inMutable = true
             val selectedImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.size, bitmapOptions)
-            val currentViewState = _takePhotoState.value
-            val newCopy = currentViewState.copy(
+            _takePhotoState.value = TakePhotoState(
                 selectedPicture = selectedImage?.asImageBitmap(),
                 tempFileUrl = null
             )
-            _takePhotoState.value = newCopy
         } else {
             _takePhotoEvents.emit(TakePhotoEvent.ShowError(Error.LoadingImageFailed))
         }

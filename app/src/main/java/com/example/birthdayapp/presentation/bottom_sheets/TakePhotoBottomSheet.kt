@@ -21,7 +21,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,6 +28,7 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.birthdayapp.R
 import com.example.birthdayapp.utils.Constants.Strings.CHOOSE_OPTION_TXT
 import com.example.birthdayapp.utils.Constants.Strings.PICK_FROM_GALLERY_TXT
@@ -51,10 +51,11 @@ fun TakePhotoBottomSheet(
 
     val currentContext = LocalContext.current
 
-    val viewState: TakePhotoState by vm.takePhotoState.collectAsState()
+    val viewState: TakePhotoState by vm.takePhotoState.collectAsStateWithLifecycle()
 
     viewState.selectedPicture?.let {
         onPickImage(it)
+        onDismiss.invoke()
     }
 
     // launches photo picker
@@ -62,7 +63,6 @@ fun TakePhotoBottomSheet(
         rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             uri?.let {
                 vm.onReceive(TakePhotoIntents.OnFinishPickingImagesWith(currentContext, it))
-                onDismiss.invoke()
             }
         }
 
@@ -83,7 +83,6 @@ fun TakePhotoBottomSheet(
                 vm.onReceive(TakePhotoIntents.OnPermissionGrantedWith(currentContext))
             } else {
                 vm.onReceive(TakePhotoIntents.OnPermissionDenied)
-                onDismiss.invoke()
             }
         }
 
