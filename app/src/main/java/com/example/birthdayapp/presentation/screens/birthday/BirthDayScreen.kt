@@ -211,7 +211,7 @@ fun BirthDayContent(item: BirthdayItem, age: Age, onError: (Error) -> Unit) {
                         modifier = Modifier
                             .size(36.dp)
                             .offset(x = (-36).dp, y = (16).dp)
-                            .clickable{
+                            .clickable {
                                 showBottomSheet = true
                             }
                     )

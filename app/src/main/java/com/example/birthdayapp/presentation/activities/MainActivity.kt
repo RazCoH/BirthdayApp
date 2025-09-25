@@ -28,7 +28,7 @@ class MainActivity : ComponentActivity() {
                         .fillMaxSize()
                         .padding(top = getStatusBarHeight(), bottom = getNavigationBarHeight())
                 ) {
-                    AppNavigation()
+                    AppNavigation(this@MainActivity)
                 }
             }
         }
