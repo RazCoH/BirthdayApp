@@ -107,7 +107,7 @@ fun BirthDayContent(item: BirthdayItem, age: Age, onError: (Error) -> Unit) {
             .background(item.theme.backgroundColor)
     ) {
         Image(
-            painter = painterResource(id = item.theme.backgroundImage),r
+            painter = painterResource(id = item.theme.backgroundImage),
             contentDescription = "background image",
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop
