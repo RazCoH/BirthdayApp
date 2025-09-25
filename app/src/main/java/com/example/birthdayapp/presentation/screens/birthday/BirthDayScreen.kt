@@ -35,6 +35,7 @@ import com.example.birthdayapp.presentation.dialogs.ErrorDialog
 import com.example.birthdayapp.utils.Constants
 import org.koin.compose.viewmodel.koinViewModel
 import androidx.compose.material3.Text
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ImageBitmap
@@ -98,7 +99,7 @@ fun BirthDayScreen(hostIP: String, vm: BirthDayScreenVM = koinViewModel(paramete
 fun BirthDayContent(item: BirthdayItem, age: Age, onError: (Error) -> Unit) {
 
     var showBottomSheet by rememberSaveable { mutableStateOf(false) }
-    var selectedImage: ImageBitmap? by rememberSaveable { mutableStateOf(null) }
+    var selectedImage: ImageBitmap? by remember { mutableStateOf(null) }
 
     Box(
         modifier = Modifier
@@ -106,7 +107,7 @@ fun BirthDayContent(item: BirthdayItem, age: Age, onError: (Error) -> Unit) {
             .background(item.theme.backgroundColor)
     ) {
         Image(
-            painter = painterResource(id = item.theme.backgroundImage),
+            painter = painterResource(id = item.theme.backgroundImage),r
             contentDescription = "background image",
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop

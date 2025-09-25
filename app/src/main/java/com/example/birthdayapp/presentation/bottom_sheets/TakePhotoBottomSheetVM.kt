@@ -34,10 +34,12 @@ class TakePhotoBottomSheetVM : ViewModel() {
 
             is TakePhotoIntents.OnImageSavedWith -> onImageSavedWith(intent)
 
-            is TakePhotoIntents.OnImageSavingCanceled -> {
-                _takePhotoState.value = TakePhotoState()
-            }
+            is TakePhotoIntents.OnImageSavingCanceled -> resetStateTakePhoto()
         }
+    }
+
+    fun resetStateTakePhoto() {
+        _takePhotoState.value = TakePhotoState()
     }
 
     private fun onPermissionGrantedWith(intent: TakePhotoIntents.OnPermissionGrantedWith){

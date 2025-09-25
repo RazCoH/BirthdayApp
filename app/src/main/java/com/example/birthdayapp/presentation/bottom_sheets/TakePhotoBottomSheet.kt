@@ -55,6 +55,7 @@ fun TakePhotoBottomSheet(
 
     viewState.selectedPicture?.let {
         onPickImage(it)
+        vm.resetStateTakePhoto()
         onDismiss.invoke()
     }
 
