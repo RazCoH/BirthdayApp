@@ -2,6 +2,7 @@ package com.example.birthdayapp.presentation.screens.birthday
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +18,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -34,6 +36,10 @@ import com.example.birthdayapp.utils.Constants
 import org.koin.compose.viewmodel.koinViewModel
 import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asAndroidBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
@@ -43,7 +49,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.birthdayapp.data.models.Age
 import com.example.birthdayapp.data.models.BirthdayItem
+import com.example.birthdayapp.presentation.bottom_sheets.TakePhotoBottomSheet
 import com.example.birthdayapp.presentation.ui.theme.BirthdayText
+import com.example.birthdayapp.utils.Error
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.core.parameter.parametersOf
 
@@ -59,7 +67,9 @@ fun BirthDayScreen(hostIP: String, vm: BirthDayScreenVM = koinViewModel(paramete
         }
 
         is BirthdayUIState.ShowBirthdayUI -> {
-            BirthDayContent(us.data,us.age)
+            BirthDayContent(us.data,us.age){
+                errorMessage = it.message
+            }
         }
     }
 
@@ -70,7 +80,6 @@ fun BirthDayScreen(hostIP: String, vm: BirthDayScreenVM = koinViewModel(paramete
             Constants.Strings.ERROR_DIALOG_BTN_TXT
         ) {
             errorMessage = null
-            vm.observeBirthdayUpdates(hostIP)
         }
     }
 
@@ -86,7 +95,10 @@ fun BirthDayScreen(hostIP: String, vm: BirthDayScreenVM = koinViewModel(paramete
 }
 
 @Composable
-fun BirthDayContent(item: BirthdayItem, age: Age) {
+fun BirthDayContent(item: BirthdayItem, age: Age, onError: (Error) -> Unit) {
+
+    var showBottomSheet by rememberSaveable { mutableStateOf(false) }
+    var selectedImage: ImageBitmap? by rememberSaveable { mutableStateOf(null) }
 
     Box(
         modifier = Modifier
@@ -111,7 +123,9 @@ fun BirthDayContent(item: BirthdayItem, age: Age) {
                 color = BirthdayText,
                 letterSpacing = (-0.42).sp,
                 fontWeight = FontWeight.W500,
-                modifier = Modifier.align(Alignment.CenterHorizontally).padding(horizontal = 20.dp),
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(horizontal = 20.dp),
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
             )
@@ -164,18 +178,31 @@ fun BirthDayContent(item: BirthdayItem, age: Age) {
 
             Box(modifier = Modifier
                 .wrapContentHeight()
-                .fillMaxWidth()){
-                Image(
-                    painter = painterResource(id = item.theme.profileImagePlaceHolder),
-                    contentDescription = "baby image",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 50.dp),
-                )
+                .fillMaxWidth()
+                .padding(horizontal = 50.dp)
+            ) {
+
                 Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 50.dp),
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    selectedImage?.let { imageBitmap ->
+                        Image(
+                            bitmap = imageBitmap.asAndroidBitmap().asImageBitmap(),
+                            contentDescription = "baby image",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier.size(220.dp).clip(CircleShape),
+                        )
+                    } ?: run {
+                        Image(
+                            painter = painterResource(id = item.theme.profileImagePlaceHolder),
+                            contentDescription = "baby image placeholder",
+                            modifier = Modifier.size(220.dp)
+                        )
+                    }
+                }
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
                     contentAlignment = Alignment.TopEnd
                 ) {
                     Image(
@@ -184,6 +211,9 @@ fun BirthDayContent(item: BirthdayItem, age: Age) {
                         modifier = Modifier
                             .size(36.dp)
                             .offset(x = (-36).dp, y = (16).dp)
+                            .clickable{
+                                showBottomSheet = true
+                            }
                     )
                 }
             }
@@ -198,6 +228,19 @@ fun BirthDayContent(item: BirthdayItem, age: Age) {
                     .height(29.45.dp)
                     .align(Alignment.CenterHorizontally)
             )
+
+            if (showBottomSheet){
+                TakePhotoBottomSheet(
+                    onPickImage = {
+                        selectedImage = it
+                    },
+                    onError = {
+                        onError(it)
+                    },
+                    onDismiss = {
+                    showBottomSheet = false
+                })
+            }
         }
     }
 }

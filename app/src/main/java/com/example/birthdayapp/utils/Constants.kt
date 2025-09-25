@@ -17,6 +17,7 @@ object Constants {
     object Errors {
         const val ERROR_NO_CONNECTION = "No Network connection, Please go to settings. "
         const val ERROR_INVALID_IP = "Invalid IP, please try again."
+        const val ERROR_LOADING_IMAGE = "Can't load the selected image"
         const val NO_DATE_IP = "No date of birth was found\nPlease fill the details in the server app"
         const val GENERAL_ERROR = "Something went wrong\nPlease try again later"
     }
@@ -40,5 +41,10 @@ object Constants {
         //Birthday Screen
         const val BD_MONTHS_TXT = "MONTHS"
         const val BD_YEARS_TXT = "YEARS"
+
+        //Take photo bottom sheet
+        const val CHOOSE_OPTION_TXT = "Choose Option"
+        const val TAKE_PHOTO_TXT = "Take Photo"
+        const val PICK_FROM_GALLERY_TXT = "Pick from Gallery"
     }
 }

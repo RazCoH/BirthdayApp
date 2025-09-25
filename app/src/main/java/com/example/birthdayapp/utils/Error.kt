@@ -6,4 +6,5 @@ sealed class Error (open val message: String = Constants.Errors.GENERAL_ERROR) {
     data object MissingAgeError : Error(Constants.Errors.NO_DATE_IP)
     data class Exception(override val message: String) : Error(message)
     data object InvalidIP : Error(Constants.Errors.ERROR_INVALID_IP)
+    data object LoadingImageFailed : Error(Constants.Errors.ERROR_LOADING_IMAGE)
 }
